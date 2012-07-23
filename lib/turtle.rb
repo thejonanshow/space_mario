@@ -8,7 +8,9 @@ class Turtle < Sprite
     @animation = animation
 
     @x = window.width
-    @x_speed = rand(10)
+    @x_speed = rand(7) + 1
+
+    @y_speed = rand(7) + 1
     @starting_y = @y = rand(@window.height)
 
     @spawn_time = Gosu::milliseconds
@@ -26,9 +28,9 @@ class Turtle < Sprite
     @flight_direction ||= flight_directions[rand(2)]
 
     if @flight_direction == 'down'
-      @y += 3
+      @y += @y_speed
     elsif @flight_direction == 'up'
-      @y -= 3
+      @y -= @y_speed
     end
 
     if @y < @animation.first.height && @flight_direction == 'up'

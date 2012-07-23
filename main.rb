@@ -17,7 +17,9 @@ class GameWindow < Gosu::Window
     @stars = []
     @bullets = []
     @turtles = []
-    @turtle_spawn_cooldown = 1
+    @max_turtles = 100
+    @max_bullets = 35
+    @turtle_spawn_cooldown = 10
 
     @all_sprites = []
 
@@ -44,7 +46,7 @@ class GameWindow < Gosu::Window
       last_turtle_spawn_time = 0
     end
 
-    @turtles.push Turtle.new(self, @turtle_animation) unless @turtles.length > 100 || Gosu::milliseconds - last_turtle_spawn_time < @turtle_spawn_cooldown
+    @turtles.push Turtle.new(self, @turtle_animation) unless @turtles.length > @max_turtles || Gosu::milliseconds - last_turtle_spawn_time < @turtle_spawn_cooldown
 
     @game_object_collections.each do |array|
       cleanup(array)
@@ -56,8 +58,14 @@ class GameWindow < Gosu::Window
     if button_down? Gosu::KbDown or button_down? Gosu::GpDown then
       @player.move_down
     end
+    if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
+      @player.move_right
+    end
+    if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
+      @player.move_left
+    end
     if button_down? Gosu::KbSpace or button_down? Gosu::GpButton0 then
-      @player.gun.fire(@player.x, @player.y) unless @bullets.length > 1000000000000
+      @player.gun.fire(@player.x, @player.y) unless @bullets.length > @max_bullets
     end
   end
 
@@ -82,7 +90,7 @@ class GameWindow < Gosu::Window
 
   def mario_dies
     @player.die
-    sleep(5)
+    # sleep(5)
     close
   end
 end

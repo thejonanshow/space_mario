@@ -32,11 +32,24 @@ class Player < Sprite
     end
   end
 
+  def move_right
+    7.times do
+      @x += 1 unless @x > @window.width - @animation.first.width
+    end
+  end
+
+  def move_left
+    7.times do
+      @x -= 1 unless @x <= @animation.first.width
+    end
+  end
+
+
   def collides_with?(obj)
     super(obj)
   end
 
   def die
-    @death_song.play
+    # @death_song.play
   end
 end

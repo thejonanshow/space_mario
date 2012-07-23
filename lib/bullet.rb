@@ -6,7 +6,8 @@ class Bullet < Sprite
 
     @x = x
     @y = y
-    @speed = 25
+    @speed = rand(20) + 1
+    @angle = [-rand(10), rand(10)].sample
 
     @image = Gosu::Image.new(window, 'media/bullet.png', true)
 
@@ -19,8 +20,14 @@ class Bullet < Sprite
   end
 
   def draw
-    @x += @speed
+    move
     @image.draw(@x - @image.width / 2.0, @y - @image.height / 2.0, 0)
+  end
+
+  def move
+    up_down = rand(2)
+    @y += @angle
+    @x += @speed
   end
 
   def off_screen?
