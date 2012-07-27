@@ -14,6 +14,9 @@ class GameWindow < Gosu::Window
   def initialize
     super 960, 720, false
     self.caption = "Space Mario!"
+    @high_score = File.read('high_score.txt').to_i if File.exist?('high_score.txt')
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @points = 0
     @stars = []
     @bullets = []
     @turtles = []
@@ -36,7 +39,10 @@ class GameWindow < Gosu::Window
     @turtles.each do |turtle|
       mario_dies if @player.collides_with? turtle
       @bullets.each do |bullet|
-        @turtles.delete turtle if bullet.collides_with? turtle
+        if bullet.collides_with? turtle
+          @points += 10
+          @turtles.delete turtle 
+        end
       end
     end
 
@@ -75,6 +81,8 @@ class GameWindow < Gosu::Window
     end
 
     @player.draw
+    @font.draw("High Score: #{@high_score || 0}", 10, 10, 1, 1.0, 1.0, 0xffffffff)
+    @font.draw("Score: #{@points}", 10, 30, 1, 1.0, 1.0, 0xffffffff)
   end
 
   def cleanup(array)
@@ -91,6 +99,7 @@ class GameWindow < Gosu::Window
   def mario_dies
     @player.die
     # sleep(5)
+    File.write('high_score.txt', @points.to_s) if @points > @high_score
     close
   end
 end
